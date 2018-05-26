@@ -1,4 +1,5 @@
-import pygame.midi
+import pygame.midi, pyautogui
+from dic import bindage
 
 def main():
     pygame.midi.init()
@@ -25,11 +26,19 @@ def main():
         print('\nStream: \n\n')
         while True:
             if inp.poll():
-                touch = inp.read(1000) #Get the stream from the midi device
+                touch = inp.read(1) #Get the stream from the midi device
                 if touch[0][0][2] != 0:
-                    print(str(touch[0][0][1] - 20), 'KEYDOWN')
-                else:
-                    print(str(touch[0][0][1] - 20), 'KEYUP')
+                    n = str(touch[0][0][1] - 20)
+                    t = bindage["{}".format(n)]
+                    if type(t) is list:
+                        pyautogui.keyDown(bindage[n][0])
+                        pyautogui.keyDown(bindage[n][1])
+                        pyautogui.keyUp(bindage[n][1])
+                        pyautogui.keyUp(bindage[n][0])
+                    else:
+                        pyautogui.keyDown(t)
+                        pyautogui.keyUp(t)
+
     except KeyboardInterrupt:
         pass
 
