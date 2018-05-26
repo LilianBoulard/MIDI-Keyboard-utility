@@ -27,11 +27,9 @@ def main():
             if inp.poll():
                 touch = inp.read(1000) #Get the stream from the midi device
                 if touch[0][0][2] != 0:
-                    status = 'KEYDOWN'
-                    print(str(touch[0][0][1] - 20), status)
+                    print(str(touch[0][0][1] - 20), 'KEYDOWN')
                 else:
-                    status = 'KEYUP'
-                    print(str(touch[0][0][1] - 20), status)
+                    print(str(touch[0][0][1] - 20), 'KEYUP')
     except KeyboardInterrupt:
         pass
 
