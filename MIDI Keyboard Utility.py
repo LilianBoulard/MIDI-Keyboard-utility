@@ -6,13 +6,13 @@ def main():
     global devices
     devices = []
 
-    for x in range(0, pygame.midi.get_count()):
+    for x in range(0, pygame.midi.get_count()): #Detects the MIDI devices conected
         p = pygame.midi.get_device_info(x)
         devices.append(p)
 
     showDevicesType()
 
-    c = input('\nSelect a device: ')
+    c = input('\nSelect a device: ') #For now, only input devices are supported
 
     try:
         c = int(c)
@@ -22,9 +22,10 @@ def main():
         exit(0)
 
     try:
+        print('\nStream: \n\n')
         while True:
             if inp.poll():
-                touch = inp.read(1000)
+                touch = inp.read(1000) #Get the stream from the midi device
                 if touch[0][0][2] != 0:
                     status = 'KEYDOWN'
                     print(str(touch[0][0][1] - 20), status)
@@ -39,13 +40,12 @@ def showDevicesType():
     print('\nDetected devices: ')
     for item in devices:
         if item[2] == 1:
-            dType = ' [Input]'
-            print(str('{}. '.format(i)) + str(item[1] + dType))
-            i += 1
-        if item[3] == 1:
-            dType = ' [Output]'
-            print(str('{}. '.format(i)) + str(item[1] + dType))
-            i += 1
+            print(str('{}. '.format(i)) + str(item[1] + ' [Input]'))
+        elif item[3] == 1:
+            print(str('{}. '.format(i)) + str(item[1] + ' [Output]'))
+        else:
+            print(str('{}. '.format(i)) + str(item[1] + ' [No Type]'))
+        i += 1
 
 if __name__ == '__main__':
     main()
